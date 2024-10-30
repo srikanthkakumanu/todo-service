@@ -31,29 +31,31 @@ public class ToDoServiceImpl implements ToDoService {
     public TodoDTO save(TodoDTO dto) {
         log.debug("save: [{}]", dto.toString());
 
-        ToDo.ToDoBuilder builder = ToDo.builder();
+        if (Objects.nonNull(dto.getId())) {
+            Optional<ToDo> foundOptional = repository.findById(dto.getId());
 
-        Optional<ToDo> foundOptional = repository.findById(dto.getId());
+            Optional<TodoDTO> updated = foundOptional.map(found -> {
+                if (Objects.nonNull(dto.getTitle()))
+                    found.setTitle(dto.getTitle());
+                if (Objects.nonNull(dto.getDescription()))
+                    found.setDescription(dto.getDescription());
+                if (Objects.nonNull(dto.getUserId()))
+                    found.setUserId(dto.getUserId());
+                if (Objects.nonNull(dto.getUserName()))
+                    found.setUserName(dto.getUserName());
+                if (Objects.nonNull(dto.getCompleted()))
+                    found.setCompleted(dto.getCompleted());
 
-        return foundOptional.map(found -> {
-                    if (Objects.nonNull(dto.getTitle()))
-                        found.setTitle(dto.getTitle());
-                    if (Objects.nonNull(dto.getDescription()))
-                        found.setDescription(dto.getDescription());
-                    if (Objects.nonNull(dto.getUserId()))
-                        found.setUserId(dto.getUserId());
-                    if (Objects.nonNull(dto.getUserName()))
-                        found.setUserName(dto.getUserName());
-                    if (Objects.nonNull(dto.getCompleted()))
-                        found.setCompleted(dto.getCompleted());
+                return mapper.toDTO(repository.save(found));
+            });
 
-                    return mapper.toDTO(repository.save(found));
-                })
-                .orElseGet(() -> {
-                    ToDo saved = repository.save(mapper.toDomain(dto));
-                    log.info("Generated Id after saving ToDo: {}", saved.getId());
-                    return mapper.toDTO(saved);
-                });
+            if (updated.isPresent())
+                return updated.get();
+        }
+
+        ToDo saved = repository.save(mapper.toDomain(dto));
+        log.info("Generated Id after saving ToDo: {}", saved.getId());
+        return mapper.toDTO(saved);
     }
 
     @Override

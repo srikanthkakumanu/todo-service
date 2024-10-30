@@ -138,14 +138,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(TodoServiceException.class)
-    public ResponseEntity<Object> handleUserServiceException(TodoServiceException ex, WebRequest request) {
+    public ResponseEntity<Object> handleToDoServiceException(TodoServiceException ex, WebRequest request) {
         log.error(ex.toString());
-        return CommonUtil.buildUserErrorResponse(ex, request);
+        return CommonUtil.buildErrorResponse(ex, request);
     }
 
     @ExceptionHandler({Exception.class, RuntimeException.class})
     public ResponseEntity<Object> handleUnknownException(Exception ex, WebRequest request) {
         log.error(ex.toString());
-        return CommonUtil.buildUserErrorResponse(ex, request);
+        return CommonUtil.buildErrorResponse(ex, request);
     }
 }

@@ -12,7 +12,7 @@ import java.util.*;
 
 public class CommonUtil {
 
-    public static ResponseEntity<Object> buildUserErrorResponse(Exception re, WebRequest request) {
+    public static ResponseEntity<Object> buildErrorResponse(Exception re, WebRequest request) {
 
         Map<String, List<Object>> body = new HashMap<>();
         List<Object> errors = new ArrayList<>();
@@ -23,8 +23,8 @@ public class CommonUtil {
                             use.getStatus(), use.getMessage(), ZonedDateTime.now(),
                             ((ServletWebRequest) request).getRequest().getRequestURI());
             default ->
-                    buildExceptionInfo("user", HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                            HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected User Service Error",
+                    buildExceptionInfo("todo", HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                            HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected ToDo Service Error",
                             ZonedDateTime.now(), ((ServletWebRequest) request).getRequest().getRequestURI());
         };
         errors.add(info);
