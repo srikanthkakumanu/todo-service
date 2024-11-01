@@ -38,7 +38,7 @@ services:
       - mariadb
       - phpmyadmin
     ports:
-      - "9102:9102"
+      - "9111:9111"
     environment:
       - SPRING_DATASOURCE_USERNAME=theuser
       - SPRING_DATASOURCE_PASSWORD=theuser
