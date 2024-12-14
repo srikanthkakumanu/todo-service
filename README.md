@@ -1,2 +1,2 @@
 # todo-service
-micro service for to-do operations
+Basic microservice for to-do functionality
